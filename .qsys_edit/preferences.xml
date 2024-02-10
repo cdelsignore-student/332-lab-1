@@ -8,6 +8,6 @@
   </columns>
  </systemtable>
  <library
-   expandedCategories="Library/Basic Functions,Library/University Program,Library/Basic Functions/Simulation; Debug and Verification,Library,Library/Basic Functions/Simulation; Debug and Verification/Debug and Performance,Library/Processors and Peripherals,Library/University Program/Clock,Library/Processors and Peripherals/Hard Processor Systems,Project" />
+   expandedCategories="Library,Library/Qsys Interconnect/Memory-Mapped,Project,Library/Qsys Interconnect" />
  <window width="1100" height="1019" x="0" y="0" />
 </preferences>
