@@ -1,5 +1,5 @@
 Flow report for count_bin
-Fri Feb 16 23:01:40 2024
+Thu Feb 22 15:07:11 2024
 Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 
 
@@ -40,15 +40,15 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Fri Feb 16 23:01:31 2024       ;
+; Flow Status                     ; Successful - Thu Feb 22 15:07:03 2024       ;
 ; Quartus Prime Version           ; 18.1.0 Build 625 09/12/2018 SJ Lite Edition ;
 ; Revision Name                   ; count_bin                                   ;
 ; Top-level Entity Name           ; count_bin_top                               ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CSEMA5F31C6                                ;
 ; Timing Models                   ; Final                                       ;
-; Logic utilization (in ALMs)     ; 1,080 / 32,070 ( 3 % )                      ;
-; Total registers                 ; 1592                                        ;
+; Logic utilization (in ALMs)     ; 1,085 / 32,070 ( 3 % )                      ;
+; Total registers                 ; 1653                                        ;
 ; Total pins                      ; 66 / 457 ( 14 % )                           ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 11,392 / 4,065,280 ( < 1 % )                ;
@@ -67,7 +67,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 02/16/2024 22:59:46 ;
+; Start date & time ; 02/22/2024 15:05:24 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; count_bin           ;
 +-------------------+---------------------+
@@ -78,7 +78,7 @@ refer to the applicable agreement for further details.
 +-------------------------------------+-------------------------------------------------------------+---------------+---------------+------------+
 ; Assignment Name                     ; Value                                                       ; Default Value ; Entity Name   ; Section Id ;
 +-------------------------------------+-------------------------------------------------------------+---------------+---------------+------------+
-; COMPILER_SIGNATURE_ID               ; 237901779406561.170814238507756                             ; --            ; --            ; --         ;
+; COMPILER_SIGNATURE_ID               ; 237901779406561.170863232311896                             ; --            ; --            ; --         ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                                                          ; --            ; --            ; --         ;
 ; MIN_CORE_JUNCTION_TEMP              ; 0                                                           ; --            ; --            ; --         ;
 ; MISC_FILE                           ; count_bin/synthesis/../count_bin.cmp                        ; --            ; --            ; --         ;
@@ -91,7 +91,7 @@ refer to the applicable agreement for further details.
 ; PROJECT_OUTPUT_DIRECTORY            ; output_files                                                ; --            ; --            ; --         ;
 ; SLD_FILE                            ; count_bin/synthesis/count_bin.regmap                        ; --            ; --            ; --         ;
 ; SLD_FILE                            ; count_bin/synthesis/count_bin.debuginfo                     ; --            ; --            ; --         ;
-; SLD_INFO                            ; QSYS_NAME count_bin HAS_SOPCINFO 1 GENERATION_ID 1708141488 ; --            ; --            ; --         ;
+; SLD_INFO                            ; QSYS_NAME count_bin HAS_SOPCINFO 1 GENERATION_ID 1708632282 ; --            ; --            ; --         ;
 ; SOPCINFO_FILE                       ; count_bin/synthesis/../../count_bin.sopcinfo                ; --            ; --            ; --         ;
 ; SYNTHESIS_ONLY_QIP                  ; On                                                          ; --            ; --            ; --         ;
 ; TOP_LEVEL_ENTITY                    ; count_bin_top                                               ; count_bin     ; --            ; --         ;
@@ -103,11 +103,11 @@ refer to the applicable agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:24     ; 1.0                     ; 5021 MB             ; 00:00:17                           ;
-; Fitter               ; 00:01:12     ; 1.1                     ; 7473 MB             ; 00:01:13                           ;
-; Assembler            ; 00:00:05     ; 1.0                     ; 4864 MB             ; 00:00:05                           ;
-; Timing Analyzer      ; 00:00:08     ; 1.6                     ; 5399 MB             ; 00:00:09                           ;
-; Total                ; 00:01:49     ; --                      ; --                  ; 00:01:44                           ;
+; Analysis & Synthesis ; 00:00:24     ; 1.0                     ; 5034 MB             ; 00:00:16                           ;
+; Fitter               ; 00:01:06     ; 1.1                     ; 7486 MB             ; 00:00:58                           ;
+; Assembler            ; 00:00:05     ; 1.0                     ; 4860 MB             ; 00:00:05                           ;
+; Timing Analyzer      ; 00:00:08     ; 1.7                     ; 5397 MB             ; 00:00:09                           ;
+; Total                ; 00:01:43     ; --                      ; --                  ; 00:01:28                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

@@ -1,0 +1,155 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Users\Collin\Desktop\332\lab1\part2\count_bin.qsys --block-symbol-file --output-directory=C:\Users\Collin\Desktop\332\lab1\part2\count_bin --family="Cyclone V" --part=5CSEMA5F31C6
+Progress: Loading part2/count_bin.qsys
+Progress: Reading input file
+Progress: Adding button_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module button_pio
+Progress: Adding jtag_uart_0 [altera_avalon_jtag_uart 18.1]
+Progress: Parameterizing module jtag_uart_0
+Progress: Adding led_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module led_pio
+Progress: Adding new_sdram_controller_0 [altera_avalon_new_sdram_controller 18.1]
+Progress: Parameterizing module new_sdram_controller_0
+Progress: Adding nios2_gen2_0 [altera_nios2_gen2 18.1]
+Progress: Parameterizing module nios2_gen2_0
+Progress: Adding seven_seg_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module seven_seg_pio
+Progress: Adding sys_sdram_pll_0 [altera_up_avalon_sys_sdram_pll 18.0]
+Progress: Parameterizing module sys_sdram_pll_0
+Progress: Adding sysid_qsys_0 [altera_avalon_sysid_qsys 18.1]
+Progress: Parameterizing module sysid_qsys_0
+Progress: Adding timer_0 [altera_avalon_timer 18.1]
+Progress: Parameterizing module timer_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: count_bin.button_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
+Info: count_bin.jtag_uart_0: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: count_bin.new_sdram_controller_0: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Info: count_bin.sys_sdram_pll_0: Refclk Freq: 50.0
+Info: count_bin.sysid_qsys_0: System ID is not assigned automatically. Edit the System ID parameter to provide a unique ID
+Info: count_bin.sysid_qsys_0: Time stamp will be automatically updated when this component is generated.
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\Users\Collin\Desktop\332\lab1\part2\count_bin.qsys --synthesis=VERILOG --output-directory=C:\Users\Collin\Desktop\332\lab1\part2\count_bin\synthesis --family="Cyclone V" --part=5CSEMA5F31C6
+Progress: Loading part2/count_bin.qsys
+Progress: Reading input file
+Progress: Adding button_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module button_pio
+Progress: Adding jtag_uart_0 [altera_avalon_jtag_uart 18.1]
+Progress: Parameterizing module jtag_uart_0
+Progress: Adding led_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module led_pio
+Progress: Adding new_sdram_controller_0 [altera_avalon_new_sdram_controller 18.1]
+Progress: Parameterizing module new_sdram_controller_0
+Progress: Adding nios2_gen2_0 [altera_nios2_gen2 18.1]
+Progress: Parameterizing module nios2_gen2_0
+Progress: Adding seven_seg_pio [altera_avalon_pio 18.1]
+Progress: Parameterizing module seven_seg_pio
+Progress: Adding sys_sdram_pll_0 [altera_up_avalon_sys_sdram_pll 18.0]
+Progress: Parameterizing module sys_sdram_pll_0
+Progress: Adding sysid_qsys_0 [altera_avalon_sysid_qsys 18.1]
+Progress: Parameterizing module sysid_qsys_0
+Progress: Adding timer_0 [altera_avalon_timer 18.1]
+Progress: Parameterizing module timer_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: count_bin.button_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
+Info: count_bin.jtag_uart_0: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: count_bin.new_sdram_controller_0: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Info: count_bin.sys_sdram_pll_0: Refclk Freq: 50.0
+Info: count_bin.sysid_qsys_0: System ID is not assigned automatically. Edit the System ID parameter to provide a unique ID
+Info: count_bin.sysid_qsys_0: Time stamp will be automatically updated when this component is generated.
+Info: count_bin: Generating count_bin "count_bin" for QUARTUS_SYNTH
+Info: button_pio: Starting RTL generation for module 'count_bin_button_pio'
+Info: button_pio:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=count_bin_button_pio --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0002_button_pio_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0002_button_pio_gen//count_bin_button_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: button_pio: Done RTL generation for module 'count_bin_button_pio'
+Info: button_pio: "count_bin" instantiated altera_avalon_pio "button_pio"
+Info: jtag_uart_0: Starting RTL generation for module 'count_bin_jtag_uart_0'
+Info: jtag_uart_0:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=count_bin_jtag_uart_0 --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0003_jtag_uart_0_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0003_jtag_uart_0_gen//count_bin_jtag_uart_0_component_configuration.pl  --do_build_sim=0  ]
+Info: jtag_uart_0: Done RTL generation for module 'count_bin_jtag_uart_0'
+Info: jtag_uart_0: "count_bin" instantiated altera_avalon_jtag_uart "jtag_uart_0"
+Info: led_pio: Starting RTL generation for module 'count_bin_led_pio'
+Info: led_pio:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=count_bin_led_pio --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0004_led_pio_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0004_led_pio_gen//count_bin_led_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: led_pio: Done RTL generation for module 'count_bin_led_pio'
+Info: led_pio: "count_bin" instantiated altera_avalon_pio "led_pio"
+Info: new_sdram_controller_0: Starting RTL generation for module 'count_bin_new_sdram_controller_0'
+Info: new_sdram_controller_0:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=count_bin_new_sdram_controller_0 --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0005_new_sdram_controller_0_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0005_new_sdram_controller_0_gen//count_bin_new_sdram_controller_0_component_configuration.pl  --do_build_sim=0  ]
+Info: new_sdram_controller_0: Done RTL generation for module 'count_bin_new_sdram_controller_0'
+Info: new_sdram_controller_0: "count_bin" instantiated altera_avalon_new_sdram_controller "new_sdram_controller_0"
+Info: nios2_gen2_0: "count_bin" instantiated altera_nios2_gen2 "nios2_gen2_0"
+Info: seven_seg_pio: Starting RTL generation for module 'count_bin_seven_seg_pio'
+Info: seven_seg_pio:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=count_bin_seven_seg_pio --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0006_seven_seg_pio_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0006_seven_seg_pio_gen//count_bin_seven_seg_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: seven_seg_pio: Done RTL generation for module 'count_bin_seven_seg_pio'
+Info: seven_seg_pio: "count_bin" instantiated altera_avalon_pio "seven_seg_pio"
+Info: sys_sdram_pll_0: "count_bin" instantiated altera_up_avalon_sys_sdram_pll "sys_sdram_pll_0"
+Info: sysid_qsys_0: "count_bin" instantiated altera_avalon_sysid_qsys "sysid_qsys_0"
+Info: timer_0: Starting RTL generation for module 'count_bin_timer_0'
+Info: timer_0:   Generation command is [exec C:/intelFPGA_lite/18.1/quartus/bin64//perl/bin/perl.exe -I C:/intelFPGA_lite/18.1/quartus/bin64//perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer/generate_rtl.pl --name=count_bin_timer_0 --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0008_timer_0_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0008_timer_0_gen//count_bin_timer_0_component_configuration.pl  --do_build_sim=0  ]
+Info: timer_0: Done RTL generation for module 'count_bin_timer_0'
+Info: timer_0: "count_bin" instantiated altera_avalon_timer "timer_0"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_001: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_002: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_003: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_004: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_005: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_006: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_007: Inserting error_adapter: error_adapter_0
+Info: mm_interconnect_0: "count_bin" instantiated altera_mm_interconnect "mm_interconnect_0"
+Info: irq_mapper: "count_bin" instantiated altera_irq_mapper "irq_mapper"
+Info: rst_controller: "count_bin" instantiated altera_reset_controller "rst_controller"
+Info: cpu: Starting RTL generation for module 'count_bin_nios2_gen2_0_cpu'
+Info: cpu:   Generation command is [exec C:/intelFPGA_lite/18.1/quartus/bin64//eperlcmd.exe -I C:/intelFPGA_lite/18.1/quartus/bin64//perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.epl --name=count_bin_nios2_gen2_0_cpu --dir=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0011_cpu_gen/ --quartus_bindir=C:/intelFPGA_lite/18.1/quartus/bin64/ --verilog --config=C:/Users/Collin/AppData/Local/Temp/alt9775_3724473596665629199.dir/0011_cpu_gen//count_bin_nios2_gen2_0_cpu_processor_configuration.pl  --do_build_sim=0  ]
+Info: cpu: # 2024.02.22 14:45:22 (*) Starting Nios II generation
+Info: cpu: # 2024.02.22 14:45:22 (*)   Checking for plaintext license.
+Info: cpu: # 2024.02.22 14:45:22 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
+Info: cpu: # 2024.02.22 14:45:22 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
+Info: cpu: # 2024.02.22 14:45:22 (*)   LM_LICENSE_FILE environment variable is empty
+Info: cpu: # 2024.02.22 14:45:22 (*)   Plaintext license not found.
+Info: cpu: # 2024.02.22 14:45:22 (*)   No license required to generate encrypted Nios II/e.
+Info: cpu: # 2024.02.22 14:45:22 (*)   Elaborating CPU configuration settings
+Info: cpu: # 2024.02.22 14:45:22 (*)   Creating all objects for CPU
+Info: cpu: # 2024.02.22 14:45:23 (*)   Generating RTL from CPU objects
+Info: cpu: # 2024.02.22 14:45:23 (*)   Creating plain-text RTL
+Info: cpu: # 2024.02.22 14:45:23 (*) Done Nios II generation
+Info: cpu: Done RTL generation for module 'count_bin_nios2_gen2_0_cpu'
+Info: cpu: "nios2_gen2_0" instantiated altera_nios2_gen2_unit "cpu"
+Info: sys_pll: "sys_sdram_pll_0" instantiated altera_pll "sys_pll"
+Info: reset_from_locked: "sys_sdram_pll_0" instantiated altera_up_avalon_reset_from_locked_signal "reset_from_locked"
+Info: nios2_gen2_0_data_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "nios2_gen2_0_data_master_translator"
+Info: jtag_uart_0_avalon_jtag_slave_translator: "mm_interconnect_0" instantiated altera_merlin_slave_translator "jtag_uart_0_avalon_jtag_slave_translator"
+Info: nios2_gen2_0_data_master_agent: "mm_interconnect_0" instantiated altera_merlin_master_agent "nios2_gen2_0_data_master_agent"
+Info: jtag_uart_0_avalon_jtag_slave_agent: "mm_interconnect_0" instantiated altera_merlin_slave_agent "jtag_uart_0_avalon_jtag_slave_agent"
+Info: jtag_uart_0_avalon_jtag_slave_agent_rsp_fifo: "mm_interconnect_0" instantiated altera_avalon_sc_fifo "jtag_uart_0_avalon_jtag_slave_agent_rsp_fifo"
+Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
+Info: router_001: "mm_interconnect_0" instantiated altera_merlin_router "router_001"
+Info: router_002: "mm_interconnect_0" instantiated altera_merlin_router "router_002"
+Info: router_004: "mm_interconnect_0" instantiated altera_merlin_router "router_004"
+Info: router_005: "mm_interconnect_0" instantiated altera_merlin_router "router_005"
+Info: new_sdram_controller_0_s1_burst_adapter: "mm_interconnect_0" instantiated altera_merlin_burst_adapter "new_sdram_controller_0_s1_burst_adapter"
+Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_demux_001: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux_001"
+Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: cmd_mux_002: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux_002"
+Info: Reusing file C:/Users/Collin/Desktop/332/lab1/part2/count_bin/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file C:/Users/Collin/Desktop/332/lab1/part2/count_bin/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_mux_001: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux_001"
+Info: Reusing file C:/Users/Collin/Desktop/332/lab1/part2/count_bin/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: new_sdram_controller_0_s1_rsp_width_adapter: "mm_interconnect_0" instantiated altera_merlin_width_adapter "new_sdram_controller_0_s1_rsp_width_adapter"
+Info: Reusing file C:/Users/Collin/Desktop/332/lab1/part2/count_bin/synthesis/submodules/altera_merlin_address_alignment.sv
+Info: Reusing file C:/Users/Collin/Desktop/332/lab1/part2/count_bin/synthesis/submodules/altera_merlin_burst_uncompressor.sv
+Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
+Info: avalon_st_adapter_003: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter_003"
+Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
+Info: error_adapter_0: "avalon_st_adapter_003" instantiated error_adapter "error_adapter_0"
+Info: count_bin: Done "count_bin" with 39 modules, 61 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

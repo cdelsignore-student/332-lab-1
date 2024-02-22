@@ -64,6 +64,12 @@
 
 #include "count_binary.h"
 
+#define STUDENT_ID_1 30800923
+#define STUDENT_ID_2 33891211
+#define LOOP_TIME_SEC 60
+
+#define F_CPU 50000000UL
+
 /* A "loop counter" variable. */
 static alt_u8 count;
 /* A variable to hold the value of the button pio edge capture register. */
@@ -147,13 +153,12 @@ static void init_button_pio()
  */
  
 #ifdef SEVEN_SEG_PIO_BASE
-static void sevenseg_set_hex(int hex)
+static void sevenseg_set_hex(int dec)
 {
-    static alt_u8 segments[16] = {
-    	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, /* 0-9 */
-        0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71 };                       /* a-f */
+    static alt_u8 segments[10] = {
+    	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
 
-    unsigned int data = segments[hex & 15] | (segments[(hex >> 4) & 15] << 8);
+    unsigned int data = (segments[dec%10] | segments[dec/10] << 8);
 
     IOWR_ALTERA_AVALON_PIO_DATA(SEVEN_SEG_PIO_BASE, data);
 }
@@ -173,12 +178,13 @@ static void lcd_init( FILE *lcd )
                ESC_TOP_LEFT);
 }
 
-static void initial_message()
+static void initial_message(int max, unsigned int sec, unsigned int usec)
 {
-    printf("\n\n**************************\n");
-    printf("* Hello from Nios II!    *\n");
-    printf("* Counting from 00 to ff *\n");
-    printf("**************************\n");
+    printf("\n\n*****************************\n");
+    printf("* Hello from Nios II!       *\n");
+    printf("* Counting from 00 to %d    *\n", max);
+    printf("* With %u sec %u usec delay *\n", sec, usec);
+    printf("*****************************\n");
 }
 
 /********************************************************
@@ -242,7 +248,7 @@ static void count_all( void* arg )
     count_led();
     count_sevenseg();
     count_lcd( arg );
-    printf("%02x,  ", count);
+    printf("%d,  ", count);
 }
   
 
@@ -263,7 +269,7 @@ static void handle_button_press(alt_u8 type, FILE *lcd)
             break;
             /* Button 3:  Output counting to D only. */
         case 0x4:
-            count_lcd( lcd );
+            count_all( lcd );
             break;
             /* Button 4:  Output counting to LED, SEVEN_SEG, and D. */ 
         case 0x8:
@@ -301,6 +307,38 @@ static void handle_button_press(alt_u8 type, FILE *lcd)
             printf( "Button press UNKNOWN!!\n");
         }
     }
+}
+
+int calculate_count_max(int num1, int num2){
+    int sum = 0;
+
+    while(num1 != 0 || num2 != 0){
+        sum += (num1 % 10) + (num2 % 10);
+        num1 /= 10;
+        num2 /= 10;
+    }
+    return sum;
+}
+
+// window_sec: time in seconds for count
+// countMax: number to end count
+// sec: 
+void calculate_usleep(int window_sec, int countMax, unsigned int *sec, unsigned int *usec){
+    unsigned int utime = window_sec*1000000;
+    unsigned int usleepInterval = utime/countMax;
+    while(usleepInterval >= 1000000){
+        *sec += 1;
+        usleepInterval -= 1000000;
+    }
+    *usec = usleepInterval;
+    
+}
+
+void do_sleep(unsigned int sec, unsigned usec){
+    for(int i = 0; i < sec; i++) {
+        usleep(1000000);
+    }
+    usleep(usec);
 }
     
 /*******************************************************************************
@@ -352,15 +390,20 @@ int main(void)
     init_button_pio();
 #endif
 
-/* Initial message to output. */
-
-    initial_message();
-
 /* Continue 0-ff counting loop. */
+    int maxCount = calculate_count_max(STUDENT_ID_1, STUDENT_ID_2);
+
+    unsigned int sec = 0;
+    unsigned int usec = 0;
+    calculate_usleep(LOOP_TIME_SEC, maxCount, &sec, &usec);
+
+    /* Initial message to output. */
+    initial_message(maxCount, sec, usec);
 
     while( 1 ) 
     {
-        usleep(100000);
+        do_sleep(sec, usec);
+
         if (edge_capture != 0)
         {
             /* Handle button presses while counting... */
@@ -375,7 +418,7 @@ int main(void)
          * If done counting, wait about 7 seconds...
          * detect button presses while waiting.
          */
-        if( count == 0xff )
+        if( count >= maxCount )
         {
             LCD_PRINTF(lcd, "%c%s %c%s %c%s Waiting...\n", ESC, ESC_TOP_LEFT,
                        ESC, ESC_CLEAR, ESC, ESC_COL1_INDENT5);
@@ -402,8 +445,10 @@ int main(void)
             }
             /*  Output the "loop start" messages before looping, again.
              */
-            initial_message();
+            initial_message(maxCount, sec, usec);
             lcd_init( lcd );
+
+            count = 0;
         }
         count++;
     }

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'count_bin'
  * SOPC Builder design path: ../../count_bin.sopcinfo
  *
- * Generated: Fri Feb 16 23:05:59 EST 2024
+ * Generated: Thu Feb 22 15:08:03 EST 2024
  */
 
 /*
@@ -186,18 +186,18 @@
 #define BUTTON_PIO_BASE 0x8001030
 #define BUTTON_PIO_BIT_CLEARING_EDGE_REGISTER 0
 #define BUTTON_PIO_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define BUTTON_PIO_CAPTURE 0
+#define BUTTON_PIO_CAPTURE 1
 #define BUTTON_PIO_DATA_WIDTH 4
 #define BUTTON_PIO_DO_TEST_BENCH_WIRING 0
 #define BUTTON_PIO_DRIVEN_SIM_VALUE 0
-#define BUTTON_PIO_EDGE_TYPE "NONE"
+#define BUTTON_PIO_EDGE_TYPE "ANY"
 #define BUTTON_PIO_FREQ 50000000
 #define BUTTON_PIO_HAS_IN 1
 #define BUTTON_PIO_HAS_OUT 0
 #define BUTTON_PIO_HAS_TRI 0
-#define BUTTON_PIO_IRQ -1
-#define BUTTON_PIO_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define BUTTON_PIO_IRQ_TYPE "NONE"
+#define BUTTON_PIO_IRQ 2
+#define BUTTON_PIO_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define BUTTON_PIO_IRQ_TYPE "EDGE"
 #define BUTTON_PIO_NAME "/dev/button_pio"
 #define BUTTON_PIO_RESET_VALUE 0
 #define BUTTON_PIO_SPAN 16
@@ -338,7 +338,7 @@
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1708141488
+#define SYSID_QSYS_0_TIMESTAMP 1708632282
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 

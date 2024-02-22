@@ -71,8 +71,11 @@ module count_bin (
 	wire   [1:0] mm_interconnect_0_led_pio_s1_address;                        // mm_interconnect_0:led_pio_s1_address -> led_pio:address
 	wire         mm_interconnect_0_led_pio_s1_write;                          // mm_interconnect_0:led_pio_s1_write -> led_pio:write_n
 	wire  [31:0] mm_interconnect_0_led_pio_s1_writedata;                      // mm_interconnect_0:led_pio_s1_writedata -> led_pio:writedata
+	wire         mm_interconnect_0_button_pio_s1_chipselect;                  // mm_interconnect_0:button_pio_s1_chipselect -> button_pio:chipselect
 	wire  [31:0] mm_interconnect_0_button_pio_s1_readdata;                    // button_pio:readdata -> mm_interconnect_0:button_pio_s1_readdata
 	wire   [1:0] mm_interconnect_0_button_pio_s1_address;                     // mm_interconnect_0:button_pio_s1_address -> button_pio:address
+	wire         mm_interconnect_0_button_pio_s1_write;                       // mm_interconnect_0:button_pio_s1_write -> button_pio:write_n
+	wire  [31:0] mm_interconnect_0_button_pio_s1_writedata;                   // mm_interconnect_0:button_pio_s1_writedata -> button_pio:writedata
 	wire         mm_interconnect_0_seven_seg_pio_s1_chipselect;               // mm_interconnect_0:seven_seg_pio_s1_chipselect -> seven_seg_pio:chipselect
 	wire  [31:0] mm_interconnect_0_seven_seg_pio_s1_readdata;                 // seven_seg_pio:readdata -> mm_interconnect_0:seven_seg_pio_s1_readdata
 	wire   [1:0] mm_interconnect_0_seven_seg_pio_s1_address;                  // mm_interconnect_0:seven_seg_pio_s1_address -> seven_seg_pio:address
@@ -80,6 +83,7 @@ module count_bin (
 	wire  [31:0] mm_interconnect_0_seven_seg_pio_s1_writedata;                // mm_interconnect_0:seven_seg_pio_s1_writedata -> seven_seg_pio:writedata
 	wire         irq_mapper_receiver0_irq;                                    // timer_0:irq -> irq_mapper:receiver0_irq
 	wire         irq_mapper_receiver1_irq;                                    // jtag_uart_0:av_irq -> irq_mapper:receiver1_irq
+	wire         irq_mapper_receiver2_irq;                                    // button_pio:irq -> irq_mapper:receiver2_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                        // irq_mapper:sender_irq -> nios2_gen2_0:irq
 	wire         rst_controller_reset_out_reset;                              // rst_controller:reset_out -> [button_pio:reset_n, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, rst_translator:in_reset, seven_seg_pio:reset_n]
 	wire         rst_controller_reset_out_reset_req;                          // rst_controller:reset_req -> [nios2_gen2_0:reset_req, rst_translator:reset_req_in]
@@ -87,11 +91,15 @@ module count_bin (
 	wire         rst_controller_001_reset_out_reset;                          // rst_controller_001:reset_out -> [jtag_uart_0:rst_n, led_pio:reset_n, mm_interconnect_0:jtag_uart_0_reset_reset_bridge_in_reset_reset, new_sdram_controller_0:reset_n, sysid_qsys_0:reset_n]
 
 	count_bin_button_pio button_pio (
-		.clk      (sys_sdram_pll_0_sys_clk_clk),              //                 clk.clk
-		.reset_n  (~rst_controller_reset_out_reset),          //               reset.reset_n
-		.address  (mm_interconnect_0_button_pio_s1_address),  //                  s1.address
-		.readdata (mm_interconnect_0_button_pio_s1_readdata), //                    .readdata
-		.in_port  (button_pio_external_connection_export)     // external_connection.export
+		.clk        (sys_sdram_pll_0_sys_clk_clk),                //                 clk.clk
+		.reset_n    (~rst_controller_reset_out_reset),            //               reset.reset_n
+		.address    (mm_interconnect_0_button_pio_s1_address),    //                  s1.address
+		.write_n    (~mm_interconnect_0_button_pio_s1_write),     //                    .write_n
+		.writedata  (mm_interconnect_0_button_pio_s1_writedata),  //                    .writedata
+		.chipselect (mm_interconnect_0_button_pio_s1_chipselect), //                    .chipselect
+		.readdata   (mm_interconnect_0_button_pio_s1_readdata),   //                    .readdata
+		.in_port    (button_pio_external_connection_export),      // external_connection.export
+		.irq        (irq_mapper_receiver2_irq)                    //                 irq.irq
 	);
 
 	count_bin_jtag_uart_0 jtag_uart_0 (
@@ -225,7 +233,10 @@ module count_bin (
 		.nios2_gen2_0_instruction_master_read           (nios2_gen2_0_instruction_master_read),                        //                                         .read
 		.nios2_gen2_0_instruction_master_readdata       (nios2_gen2_0_instruction_master_readdata),                    //                                         .readdata
 		.button_pio_s1_address                          (mm_interconnect_0_button_pio_s1_address),                     //                            button_pio_s1.address
+		.button_pio_s1_write                            (mm_interconnect_0_button_pio_s1_write),                       //                                         .write
 		.button_pio_s1_readdata                         (mm_interconnect_0_button_pio_s1_readdata),                    //                                         .readdata
+		.button_pio_s1_writedata                        (mm_interconnect_0_button_pio_s1_writedata),                   //                                         .writedata
+		.button_pio_s1_chipselect                       (mm_interconnect_0_button_pio_s1_chipselect),                  //                                         .chipselect
 		.jtag_uart_0_avalon_jtag_slave_address          (mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_address),     //            jtag_uart_0_avalon_jtag_slave.address
 		.jtag_uart_0_avalon_jtag_slave_write            (mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_write),       //                                         .write
 		.jtag_uart_0_avalon_jtag_slave_read             (mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_read),        //                                         .read
@@ -274,6 +285,7 @@ module count_bin (
 		.reset         (rst_controller_reset_out_reset), // clk_reset.reset
 		.receiver0_irq (irq_mapper_receiver0_irq),       // receiver0.irq
 		.receiver1_irq (irq_mapper_receiver1_irq),       // receiver1.irq
+		.receiver2_irq (irq_mapper_receiver2_irq),       // receiver2.irq
 		.sender_irq    (nios2_gen2_0_irq_irq)            //    sender.irq
 	);
 

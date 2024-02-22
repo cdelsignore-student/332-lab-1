@@ -225,7 +225,7 @@ module count_bin_mm_interconnect_0_router
     end
 
     // ( 0x8001030 .. 0x8001040 )
-    if ( {address[RG:PAD4],{PAD4{1'b0}}} == 28'h8001030  && read_transaction  ) begin
+    if ( {address[RG:PAD4],{PAD4{1'b0}}} == 28'h8001030   ) begin
             src_channel = 8'b01000000;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
     end

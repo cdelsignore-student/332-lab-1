@@ -1,10 +1,10 @@
-Analysis & Synthesis Status : Successful - Fri Feb 16 23:00:11 2024
+Analysis & Synthesis Status : Successful - Thu Feb 22 15:05:49 2024
 Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
 Revision Name : count_bin
 Top-level Entity Name : count_bin_top
 Family : Cyclone V
 Logic utilization (in ALMs) : N/A
-Total registers : 1508
+Total registers : 1528
 Total pins : 66
 Total virtual pins : 0
 Total block memory bits : 11,392
