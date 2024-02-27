@@ -1,183 +1,80 @@
-/*************************************************************************
- * Copyright (c) 2009 Altera Corporation, San Jose, California, USA.      *
- * All rights reserved. All use of this software and documentation is     *
- * subject to the License Agreement located at the end of this file below.*
- *************************************************************************/
-/******************************************************************************
- *
- * Description
- * ************* 
- * A simple program which, using an 8 bit variable, counts from 0 to ff, 
- * repeatedly.  Output of this variable is displayed on the LEDs, the Seven
- * Segment Display, and the LCD.  The four "buttons" (SW0-SW3) are used
- * to control output to these devices in the following manner:
- *   Button1 (SW0) => LED is "counting"
- *   Button2 (SW1) => Seven Segment is "counting"
- *   Button3 (SW2) => LCD is "counting"
- *   Button4 (SW3) => All of the peripherals are "counting".
- *
- * Upon completion of "counting", there is a short waiting period during 
- * which button/switch presses will be identified on STDOUT.
- * NOTE:  These buttons have not been de-bounced, so one button press may 
- *        cause multiple notifications to STDOUT.
- * 
- * Requirements
- * **************
- * This program requires the following devices to be configured:
- *   an LED PIO named 'led_pio',
- *   a Seven Segment Display PIO named 'seven_seg_pio',
- *   an LCD Display named 'lcd_display',
- *   a Button PIO named 'button_pio',
- *   a UART (JTAG or standard serial)
- *
- * Peripherals Exercised by SW
- * *****************************
- * LEDs
- * Seven Segment Display
- * LCD
- * Buttons (SW0-SW3)
- * UART (JTAG or serial)
+#include "alt_types.h"
+#include "altera_avalon_pio_regs.h"
+#include "sys/alt_irq.h"
+#include "system.h"
+#include <stdio.h>
+#include <unistd.h>
 
- * Software Files
- * ****************
- * count_binary.c ==>  This file.
- *                     main() is contained here, as is the lion's share of the
- *                     functionality.
- * count_binary.h ==>  Contains some very simple VT100 ESC sequence defines
- *                     for formatting text to the LCD Display.
- * 
- *
- * Useful Functions
- * *****************
- * count_binary.c (this file) has the following useful functions.
- *   static void sevenseg_set_hex( int hex )
- *     - Defines a hexadecimal display map for the seven segment display.
- *   static void handle_button_interrupts( void* context, alt_u32 id)
- *   static void init_button_pio()
- *     - These are useful functions because they demonstrate how to write
- *       and register an interrupt handler with the system library.
- *
- * count_binary.h 
- *   The file defines some useful VT100 escape sequences for use on the LCD
- *   Display.
- */
+#define STUDENT_ID_1 30800923                                                   // INT      used in determining max count
+#define STUDENT_ID_2 33891211                                                   // INT      used in determining max count
+#define LOOP_TIME_SEC 60                                                        // INT      target time in seconds for count to reach max
+#define DELAY_PRESCALER 3.5                                                     // FLOAT    divisor used to calibrate DE1_SoC sleep timing
 
-#include "count_binary.h"
+static alt_u8 count;                                                            // Holds the current count
+volatile int edge_capture;                                                      // Holds the value of the button pio edge capture reg
 
-#define STUDENT_ID_1 30800923
-#define STUDENT_ID_2 33891211
-#define LOOP_TIME_SEC 60
-
-#define F_CPU 50000000UL
-
-/* A "loop counter" variable. */
-static alt_u8 count;
-/* A variable to hold the value of the button pio edge capture register. */
-volatile int edge_capture;
-
-
-/* Button pio functions */
-
-/*
-  Some simple functions to:
-  1.  Define an interrupt handler function.
-  2.  Register this handler in the system.
-*/
-
-/*******************************************************************
- * static void handle_button_interrupts( void* context, alt_u32 id)*
- *                                                                 *  
- * Handle interrupts from the buttons.                             *
- * This interrupt event is triggered by a button/switch press.     *
- * This handler sets *context to the value read from the button    *
- * edge capture register.  The button edge capture register        *
- * is then cleared and normal program execution resumes.           *
- * The value stored in *context is used to control program flow    *
- * in the rest of this program's routines.                         *
- *                                                                 *
- * Provision is made here for systems that might have either the   *
- * legacy or enhanced interrupt API active, or for the Nios II IDE *
- * which does not support enhanced interrupts. For systems created *
- * using the Nios II softawre build tools, the enhanced API is     *
- * recommended for new designs.                                    *
- ******************************************************************/
 #ifdef BUTTON_PIO_BASE
+    // =======================================================================
+    // static void handle_button_interrupts(void* context, alt_u32 id)
+    // 
+    // Sets *context to the value in the button edge capture register and then
+    // clears the reg to continue normal program execution
+    // =======================================================================
+    #ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT
+        static void handle_button_interrupts(void* context)                     // For enchanced interrupts
+    #else
+        static void handle_button_interrupts(void* context, alt_u32 id)         // For legacy interrupts
+    #endif
+    {
+        volatile int* edge_capture_ptr = (volatile int*) context;               // Volatile to avoid compiler optimization
+        *edge_capture_ptr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE);   // Store value from button edge capture reg
+        IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE, 0);                    // Clear button edge capture reg
+        IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE);                       // Read PIO to delay ISR exit and prevent spurious interrupt
+    }
 
-#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT
-static void handle_button_interrupts(void* context)
-#else
-static void handle_button_interrupts(void* context, alt_u32 id)
+    // =======================================================================
+    // static void init_button_pio()
+    // 
+    // Initializes button PIO and interrupts for the three input switches
+    // =======================================================================
+    static void init_button_pio()
+    {
+        void* edge_capture_ptr = (void*) &edge_capture;                         // Cast to match alt_irq_register() function
+        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0xf);                  // Enable button interrupts. TODO: change to 0xe for three buttons?
+        IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE, 0x0);                  // Clear button edge capture reg
+
+        // Register the interrupt handler.
+        #ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT
+            alt_ic_isr_register(BUTTON_PIO_IRQ_INTERRUPT_CONTROLLER_ID,         // For enchanced interrupts
+                BUTTON_PIO_IRQ, handle_button_interrupts, edge_capture_ptr, 0x0);
+        #else
+            alt_irq_register( BUTTON_PIO_IRQ, edge_capture_ptr,                 // For legacy interrupts
+                handle_button_interrupts);
+        #endif
+    }
 #endif
-{
-    /* Cast context to edge_capture's type. It is important that this be 
-     * declared volatile to avoid unwanted compiler optimization.
-     */
-    volatile int* edge_capture_ptr = (volatile int*) context;
-    /* Store the value in the Button's edge capture register in *context. */
-    *edge_capture_ptr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE);
-    /* Reset the Button's edge capture register. */
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE, 0);
-    
-    /* 
-     * Read the PIO to delay ISR exit. This is done to prevent a spurious
-     * interrupt in systems with high processor -> pio latency and fast
-     * interrupts.
-     */
-    IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE); 
-}
 
-/* Initialize the button_pio. */
-
-static void init_button_pio()
-{
-    /* Recast the edge_capture pointer to match the alt_irq_register() function
-     * prototype. */
-    void* edge_capture_ptr = (void*) &edge_capture;
-    /* Enable all 4 button interrupts. */
-    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0xf);
-    /* Reset the edge capture register. */
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE, 0x0);
-    /* Register the interrupt handler. */
-#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT
-    alt_ic_isr_register(BUTTON_PIO_IRQ_INTERRUPT_CONTROLLER_ID, BUTTON_PIO_IRQ, 
-      handle_button_interrupts, edge_capture_ptr, 0x0);
-#else
-    alt_irq_register( BUTTON_PIO_IRQ, edge_capture_ptr, 
-      handle_button_interrupts);
-#endif
-}
-#endif /* BUTTON_PIO_BASE */
-
-/* Seven Segment Display PIO Functions 
- * sevenseg_set_hex() --  implements a hex digit map.
- */
- 
 #ifdef SEVEN_SEG_PIO_BASE
-static void sevenseg_set_hex(int dec)
-{
-    static alt_u8 segments[10] = {
-    	0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
+    // =======================================================================
+    // static void sevenseg_set_dec(int dec) 
+    // 
+    // Displays dec on the 2-digit seven segment display                 
+    // =======================================================================
+    static void sevenseg_set_dec(int dec)
+    {
+        static alt_u8 segments[10] = { 0x3F, 0x06, 0x5B, 0x4F, 0x66,            // Bit representations of numbers for 7 segment display
+                                       0x6D, 0x7D, 0x07, 0x7F, 0x6F };          // 0-9, indexed respectively
 
-    unsigned int data = (segments[dec%10] | segments[dec/10] << 8);
-
-    IOWR_ALTERA_AVALON_PIO_DATA(SEVEN_SEG_PIO_BASE, data);
-}
+        unsigned int data = (segments[dec%10] | segments[dec/10] << 8);         // Packs [Ones][Tens] bit information (note integer division)
+        IOWR_ALTERA_AVALON_PIO_DATA(SEVEN_SEG_PIO_BASE, data);                  // Pushes data to the seven segment PIO
+    }
 #endif
 
-/* Functions used in main loop
- * lcd_init() -- Writes a simple message to the top line of the LCD.
- * initial_message() -- Writes a message to stdout (usually JTAG_UART).
- * count_<device>() -- Implements the counting on the respective device.
- * handle_button_press() -- Determines what to do when one of the buttons
- * is pressed.
- */
-static void lcd_init( FILE *lcd )
-{
-    /* If the LCD Display exists, write a simple message on the first line. */
-    LCD_PRINTF(lcd, "%c%s Counting will be displayed below...", ESC,
-               ESC_TOP_LEFT);
-}
-
+// ===========================================================================
+// static void initial_message(int max, unsigned int sec, unsigned int usec)
+// 
+// Prints some information to the console at the start of a counting loop
+// ===========================================================================
 static void initial_message(int max, unsigned int sec, unsigned int usec)
 {
     printf("\n\n*****************************\n");
@@ -187,301 +84,162 @@ static void initial_message(int max, unsigned int sec, unsigned int usec)
     printf("*****************************\n");
 }
 
-/********************************************************
- * The following functions write the value of the global*
- * variable 'count' to 3 peripherals, if they exist in  *
- * the system.  Specifically:                           *
- * The LEDs will illuminate, the Seven Segment Display  *
- * will count from 00-ff, and the LCD will display the  *
- * hex value as the program loops.                      *
- * *****************************************************/
-
-/* static void count_led()
- * 
- * Illuminate LEDs with the value of 'count', if they
- * exist in the system
- */
-
-static void count_led()
+// ===========================================================================
+// static void show_count_led()
+// 
+// Displays the current count in binary represenatation on board's led strip
+// ===========================================================================
+static void show_count_led()
 {
 #ifdef LED_PIO_BASE
-    IOWR_ALTERA_AVALON_PIO_DATA(
-        LED_PIO_BASE,
-        count
-        );
+    IOWR_ALTERA_AVALON_PIO_DATA(LED_PIO_BASE, count);                           // Push data to LED PIO
 #endif
 }
 
-/* static void count_sevenseg()
- * 
- * Display value of 'count' on the Seven Segment Display
- */
-
-static void count_sevenseg()
+// ===========================================================================
+// static void show_count_sevenseg()
+// 
+// Displays the current count in decimal represenatation on board's first two
+// seven segment displays 
+// ===========================================================================
+static void show_count_sevenseg()
 {
 #ifdef SEVEN_SEG_PIO_BASE
-    sevenseg_set_hex(count);
+    sevenseg_set_dec(count);
 #endif
 }
 
-/* static void count_lcd()
- * 
- * Display the value of 'count' on the LCD Display, if it
- * exists in the system.
- * 
- * NOTE:  A HAL character device driver is used, so the LCD
- * is treated as an I/O device (i.e.: using fprintf).  You
- * can read more about HAL drivers <link/reference here>.
- */
-
-static void count_lcd( void* arg )
+// ===========================================================================
+// static void show_count_all()
+// 
+// Displays the current count on both led strip and seven segment displays
+// ===========================================================================
+static void show_count_all()
 {
-    FILE* __attribute__ ((unused))  lcd;  /* Attribute suppresses "unused variable" warning. */
-    lcd = (FILE*) arg;
-    LCD_PRINTF(lcd, "%c%s 0x%x\n", ESC, ESC_COL2_INDENT5, count);
-}
-
-/* count_all merely combines all three peripherals counting */
-
-static void count_all( void* arg )
-{
-    count_led();
-    count_sevenseg();
-    count_lcd( arg );
+    show_count_led();
+    show_count_sevenseg();
     printf("%d,  ", count);
 }
-  
 
-static void handle_button_press(alt_u8 type, FILE *lcd)
+// ===========================================================================
+// static void handle_button_press()
+// 
+// Selects appropriate display output based on switch selection
+// ===========================================================================
+static void handle_button_press()
 {
-    /* Button press actions while counting. */
-    if (type == 'c')
+    switch (edge_capture) 
     {
-        switch (edge_capture) 
-        {
-            /* Button 1:  Output counting to LED only. */
-        case 0x1:
-            count_led();
-            break;
-            /* Button 2:  Output counting to SEVEN SEG only. */
-        case 0x2:
-            count_sevenseg();
-            break;
-            /* Button 3:  Output counting to D only. */
-        case 0x4:
-            count_all( lcd );
-            break;
-            /* Button 4:  Output counting to LED, SEVEN_SEG, and D. */ 
-        case 0x8:
-            count_all( lcd );
-            break;
-            /* If value ends up being something different (shouldn't) do
-               same as 8. */
-        default:
-            count_all( lcd );
-            break;
-        }
-    }
-    /* If 'type' is anything else, assume we're "waiting"...*/
-    else
-    {
-        switch (edge_capture)
-        {
-        case 0x1:
-            printf( "Button 1\n");
-            edge_capture = 0;
-            break;
-        case 0x2:
-            printf( "Button 2\n");
-            edge_capture = 0;
-            break;
-        case 0x4:
-            printf( "Button 3\n");
-            edge_capture = 0;
-            break;
-        case 0x8:
-            printf( "Button 4\n");
-            edge_capture = 0;
-            break;
-        default:
-            printf( "Button press UNKNOWN!!\n");
-        }
+    case 0x1:                                                                   // Button 1 is switched
+        show_count_led();                                                       // Show on LED strip
+        break;
+    case 0x2:                                                                   // Button 2 is switched
+        show_count_sevenseg();                                                  // Show on seven segment display
+        break;
+    case 0x4:                                                                   // Button 3 is switched
+        show_count_all();                                                       // Show on both
+        break;
+    default:                                                                    // Other (shouldn't occur)
+        show_count_all();                                                       // Show on both
+        break;
     }
 }
 
-int calculate_count_max(int num1, int num2){
+// ===========================================================================
+// int calculate_count_max(int num1, int num2)
+// 
+// Returns the sum of all digits in num1 and num2
+// ===========================================================================
+int calculate_count_max(int num1, int num2)
+{
     int sum = 0;
 
-    while(num1 != 0 || num2 != 0){
-        sum += (num1 % 10) + (num2 % 10);
-        num1 /= 10;
-        num2 /= 10;
+    while(num1 != 0 || num2 != 0){                                              // While there are still digits left
+        sum += (num1 % 10) + (num2 % 10);                                       // Get the digits and add to sum
+        num1 /= 10;                                                             // Move to next digit
+        num2 /= 10;                                                             // Move to next digit
     }
     return sum;
 }
 
-// window_sec: time in seconds for count
-// countMax: number to end count
-// sec: 
-void calculate_usleep(int window_sec, int countMax, unsigned int *sec, unsigned int *usec){
-    unsigned int utime = window_sec*1000000;
-    unsigned int usleepInterval = utime/countMax;
-    while(usleepInterval >= 1000000){
+// ===========================================================================
+// void calculate_usleep(int window_sec, int countMax, float prescaler, unsigned int *sec, unsigned int *usec)
+// 
+// Calculates the delay needed to reach countMax in window_sec seconds based on
+// a calibration prescaler. Returns as two parts: a full-second delay and a
+// fractional second delay in microseconds. This is to overcome the 1s max on
+// usleep()
+// ===========================================================================
+void calculate_usleep(int window_sec, int countMax, float prescaler, unsigned int *sec, unsigned int *usec)
+{
+    unsigned int utime = window_sec*1000000;                                    // Convert to microseconds
+    unsigned int usleepInterval = utime/countMax/prescaler;                     // Calculate target interval
+    while(usleepInterval >= 1000000){                                           // Determine full second part
         *sec += 1;
         usleepInterval -= 1000000;
     }
-    *usec = usleepInterval;
-    
+    *usec = usleepInterval;                                                     // Remainder in microseconds
 }
 
-void do_sleep(unsigned int sec, unsigned usec){
-    for(int i = 0; i < sec; i++) {
+// ===========================================================================
+// void do_sleep(unsigned int sec, unsigned usec)
+// 
+// Wrapper function for usleep() that allows for delays greater than 1 second
+// ===========================================================================
+void do_sleep(unsigned int sec, unsigned usec)
+{
+    for(int i = 0; i < sec; i++) {                                              // Delay for the full second portion
         usleep(1000000);
     }
-    usleep(usec);
+    usleep(usec);                                                               // Delay for the remaining microseconds
 }
-    
-/*******************************************************************************
- * int main()                                                                  *
- *                                                                             *
- * Implements a continuous loop counting from 00 to FF.  'count' is the loop   *
- * counter.                                                                    *
- * The value of 'count' will be displayed on one or more of the following 3    *
- * devices, based upon hardware availability:  LEDs, Seven Segment Display,    *
- * and the LCD Display.                                                        *
- *                                                                             *
- * During the counting loop, a switch press of SW0-SW3 will affect the         *
- * behavior of the counting in the following way:                              *
- *                                                                             *
- * SW0 - Only the LED will be "counting".                                      *
- * SW1 - Only the Seven Segment Display will be "counting".                    *
- * SW2 - Only the LCD Display will be "counting".                              *
- * SW3 - All devices "counting".                                               *
- *                                                                             *
- * There is also a 7 second "wait", following the count loop,                 *
- * during which button presses are still                                       *
- * detected.                                                                   *
- *                                                                             *
- * The result of the button press is displayed on STDOUT.                      *
- *                                                                             *
- * NOTE:  These buttons are not de-bounced, so you may get multiple            *
- * messages for what you thought was a single button press!                    *
- *                                                                             *
- * NOTE:  References to Buttons 1-4 correspond to SW0-SW3 on the Development   *
- * Board.                                                                      *
- ******************************************************************************/
 
+// ===========================================================================
+// int main(void)
+// 
+// Continuously counts from 0 to an arbitrary maximum. Selectable output based
+// on DE1_SoC switches. Count is displayed on STDOUT at all times.
+//
+// SW0 - LED strip shows count in binary
+// SW1 - First two seven segment displays show count in decimal
+// SW2 - Both devices display count
+// ===========================================================================
 int main(void)
 { 
-    int i;
-    int  __attribute__ ((unused))  wait_time;  /* Attribute suppresses "var set but not used" warning. */
-    FILE * lcd;
-
-    count = 0;
-
-    /* Initialize the LCD, if there is one.
-     */
-    lcd = LCD_OPEN();
-    if(lcd != NULL) {lcd_init( lcd );}
+    int i;                                                                      // Iterator (I assume declared here for optimization)
+    int  __attribute__ ((unused))  wait_time;                                   // Attribute suppresses "var set but not used" warning.
+    int maxCount = calculate_count_max(STUDENT_ID_1, STUDENT_ID_2);             // Target number for counting
+    unsigned int sec = 0;                                                       // Full second portion of needed delay interval
+    unsigned int usec = 0;                                                      // Microsecond portion of needed delay interval
     
-    /* Initialize the button pio. */
+    #ifdef BUTTON_PIO_BASE                                                      
+        init_button_pio();                                                      // If the board has button PIO, initialize
+    #endif
+ 
+    calculate_usleep(LOOP_TIME_SEC, maxCount, DELAY_PRESCALER, &sec, &usec);    // Calculate delays
+    initial_message(maxCount, sec, usec);                                       // Print debug info to the console
 
-#ifdef BUTTON_PIO_BASE
-    init_button_pio();
-#endif
-
-/* Continue 0-ff counting loop. */
-    int maxCount = calculate_count_max(STUDENT_ID_1, STUDENT_ID_2);
-
-    unsigned int sec = 0;
-    unsigned int usec = 0;
-    calculate_usleep(LOOP_TIME_SEC, maxCount, &sec, &usec);
-
-    /* Initial message to output. */
-    initial_message(maxCount, sec, usec);
-
-    while( 1 ) 
+    count = 0;                                                                  // Initialize the count at 0
+    while( 1 )                                                                  // Loop counting from 0 to maxCount forever
     {
-        do_sleep(sec, usec);
+        do_sleep(sec, usec);                                                    // Wait based on calculated interval
 
-        if (edge_capture != 0)
-        {
-            /* Handle button presses while counting... */
-            handle_button_press('c', lcd);
+        // If there is a button press handle it, otherwise attempt to show all
+        if (edge_capture != 0){
+            handle_button_press();
+        } else {
+            show_count_all();
         }
-        /* If no button presses, try to output counting to all. */
-        else
-        {
-            count_all( lcd );
-        }
-        /*
-         * If done counting, wait about 7 seconds...
-         * detect button presses while waiting.
-         */
+
+        // If we have reached the final number
         if( count >= maxCount )
         {
-            LCD_PRINTF(lcd, "%c%s %c%s %c%s Waiting...\n", ESC, ESC_TOP_LEFT,
-                       ESC, ESC_CLEAR, ESC, ESC_COL1_INDENT5);
-            printf("\nWaiting...");
-            edge_capture = 0; /* Reset to 0 during wait/pause period. */
-
-            /* Clear the 2nd. line of the LCD screen. */
-            LCD_PRINTF(lcd, "%c%s, %c%s", ESC, ESC_COL2_INDENT5, ESC,
-                       ESC_CLEAR);
-            wait_time = 0;
-            for (i = 0; i<70; ++i)
-            {
-                printf(".");
-                wait_time = i/10;
-                LCD_PRINTF(lcd, "%c%s %ds\n", ESC, ESC_COL2_INDENT5,
-                    wait_time+1);
-
-                if (edge_capture != 0) 
-                {
-                    printf( "\nYou pushed:  " );
-                    handle_button_press('w', lcd);
-                }
-                usleep(100000); /* Sleep for 0.1s. */
-            }
-            /*  Output the "loop start" messages before looping, again.
-             */
-            initial_message(maxCount, sec, usec);
-            lcd_init( lcd );
-
-            count = 0;
+            edge_capture = 0;                                                   // Clear the capture value
+            initial_message(maxCount, sec, usec);                               // Print debug info to the console
+            count = 0;                                                          // Reset the count
         }
-        count++;
+        count++;                                                                // Increment the count
     }
-    LCD_CLOSE(lcd);
-    return 0;
+
+    return 0;                                                                   // Should never reach here
 }
-/******************************************************************************
- *                                                                             *
- * License Agreement                                                           *
- *                                                                             *
- * Copyright (c) 2006 Altera Corporation, San Jose, California, USA.           *
- * All rights reserved.                                                        *
- *                                                                             *
- * Permission is hereby granted, free of charge, to any person obtaining a     *
- * copy of this software and associated documentation files (the "Software"),  *
- * to deal in the Software without restriction, including without limitation   *
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,    *
- * and/or sell copies of the Software, and to permit persons to whom the       *
- * Software is furnished to do so, subject to the following conditions:        *
- *                                                                             *
- * The above copyright notice and this permission notice shall be included in  *
- * all copies or substantial portions of the Software.                         *
- *                                                                             *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  *
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    *
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE *
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER      *
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING     *
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER         *
- * DEALINGS IN THE SOFTWARE.                                                   *
- *                                                                             *
- * This agreement shall be governed in all respects by the laws of the State   *
- * of California and by the laws of the United States of America.              *
- * Altera does not recommend, suggest or require that this reference design    *
- * file be used in conjunction or combination with any other product.          *
- ******************************************************************************/
