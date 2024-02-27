@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="count_bin" kind="system" version="18.1" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2024.02.22.15:05:06 -->
+ <!-- 2024.02.27.02:28:58 -->
  <!-- A collection of modules and connections -->
  <parameter name="clockCrossingAdapter">
   <type>com.altera.sopcmodel.ensemble.EClockAdapter</type>
@@ -53,7 +53,7 @@
  </parameter>
  <parameter name="generationId">
   <type>int</type>
-  <value>1708632282</value>
+  <value>1709018906</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>true</visible>
@@ -168,7 +168,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DATA_WIDTH</name>
-   <value>4</value>
+   <value>3</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DO_TEST_BENCH_WIRING</name>
@@ -220,7 +220,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,gpio-bank-width</name>
-   <value>4</value>
+   <value>3</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,interrupt-type</name>
@@ -328,7 +328,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="width">
    <type>int</type>
-   <value>4</value>
+   <value>3</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -936,7 +936,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>in_port</name>
     <direction>Input</direction>
-    <width>4</width>
+    <width>3</width>
     <role>export</role>
    </port>
   </interface>
@@ -7953,7 +7953,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TIMESTAMP</name>
-   <value>1708632282</value>
+   <value>1709018906</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -7973,7 +7973,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.timestamp</name>
-   <value>1708632282</value>
+   <value>1709018906</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -7989,7 +7989,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="timestamp">
    <type>int</type>
-   <value>1708632282</value>
+   <value>1709018906</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -15986,5 +15986,5 @@ parameters are a RESULT of the module parameters. -->
   <version>18.1</version>
  </plugin>
  <reportVersion>18.1 625</reportVersion>
- <uniqueIdentifier>F64EE394E6FC0000018DD26BA017</uniqueIdentifier>
+ <uniqueIdentifier>F64EE394E6FC0000018DE9771098</uniqueIdentifier>
 </EnsembleReport>

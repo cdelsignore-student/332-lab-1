@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'count_bin'
  * SOPC Builder design path: ../../count_bin.sopcinfo
  *
- * Generated: Thu Feb 22 15:08:03 EST 2024
+ * Generated: Tue Feb 27 02:30:20 EST 2024
  */
 
 /*
@@ -187,7 +187,7 @@
 #define BUTTON_PIO_BIT_CLEARING_EDGE_REGISTER 0
 #define BUTTON_PIO_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define BUTTON_PIO_CAPTURE 1
-#define BUTTON_PIO_DATA_WIDTH 4
+#define BUTTON_PIO_DATA_WIDTH 3
 #define BUTTON_PIO_DO_TEST_BENCH_WIRING 0
 #define BUTTON_PIO_DRIVEN_SIM_VALUE 0
 #define BUTTON_PIO_EDGE_TYPE "ANY"
@@ -338,7 +338,7 @@
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1708632282
+#define SYSID_QSYS_0_TIMESTAMP 1709018906
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 22, 2024 3:08:02 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1708632482800</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 27, 2024 2:30:19 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1709019019295</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\Collin\Desktop\332\lab1\part2\software\count_bin_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\count_bin.sopcinfo</SopcDesignFile>

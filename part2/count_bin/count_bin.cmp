@@ -1,6 +1,6 @@
 	component count_bin is
 		port (
-			button_pio_external_connection_export    : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- export
+			button_pio_external_connection_export    : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- export
 			led_pio_external_connection_export       : out   std_logic_vector(7 downto 0);                     -- export
 			new_sdram_controller_0_wire_addr         : out   std_logic_vector(12 downto 0);                    -- addr
 			new_sdram_controller_0_wire_ba           : out   std_logic_vector(1 downto 0);                     -- ba

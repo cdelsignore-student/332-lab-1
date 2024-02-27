@@ -4,7 +4,7 @@
 
 `timescale 1 ps / 1 ps
 module count_bin (
-		input  wire [3:0]  button_pio_external_connection_export,    //    button_pio_external_connection.export
+		input  wire [2:0]  button_pio_external_connection_export,    //    button_pio_external_connection.export
 		output wire [7:0]  led_pio_external_connection_export,       //       led_pio_external_connection.export
 		output wire [12:0] new_sdram_controller_0_wire_addr,         //       new_sdram_controller_0_wire.addr
 		output wire [1:0]  new_sdram_controller_0_wire_ba,           //                                  .ba

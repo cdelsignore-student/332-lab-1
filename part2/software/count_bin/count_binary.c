@@ -40,7 +40,7 @@ volatile int edge_capture;                                                      
     static void init_button_pio()
     {
         void* edge_capture_ptr = (void*) &edge_capture;                         // Cast to match alt_irq_register() function
-        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0xf);                  // Enable button interrupts. TODO: change to 0xe for three buttons?
+        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0x7);                  // Enable button interrupts.
         IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTON_PIO_BASE, 0x0);                  // Clear button edge capture reg
 
         // Register the interrupt handler.

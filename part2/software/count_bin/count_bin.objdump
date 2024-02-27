@@ -1000,8 +1000,8 @@ alt_after_alt_main:
         void* edge_capture_ptr = (void*) &edge_capture;                         // Cast to match alt_irq_register() function
  40002d8:	d0a6cf04 	addi	r2,gp,-25796
  40002dc:	e0bfff15 	stw	r2,-4(fp)
-        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0xf);                  // Enable button interrupts. TODO: change to 0xe for three buttons?
- 40002e0:	00c003c4 	movi	r3,15
+        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTON_PIO_BASE, 0x7);                  // Enable button interrupts.
+ 40002e0:	00c001c4 	movi	r3,7
  40002e4:	00820034 	movhi	r2,2048
  40002e8:	10840e04 	addi	r2,r2,4152
  40002ec:	10c00035 	stwio	r3,0(r2)
@@ -1454,10 +1454,10 @@ void do_sleep(unsigned int sec, unsigned usec)
  4000744:	f800283a 	ret
 
 04000748 <main>:
- * NOTE:  References to Buttons 1-4 correspond to SW0-SW3 on the Development   *
- * Board.                                                                      *
- ******************************************************************************/
-
+// SW0 - LED strip shows count in binary
+// SW1 - First two seven segment displays show count in decimal
+// SW2 - Both devices display count
+// ===========================================================================
 int main(void)
 { 
  4000748:	defffa04 	addi	sp,sp,-24

@@ -16,7 +16,7 @@ module count_bin (
 	sys_sdram_pll_0_ref_reset_reset,
 	sys_sdram_pll_0_sdram_clk_clk);	
 
-	input	[3:0]	button_pio_external_connection_export;
+	input	[2:0]	button_pio_external_connection_export;
 	output	[7:0]	led_pio_external_connection_export;
 	output	[12:0]	new_sdram_controller_0_wire_addr;
 	output	[1:0]	new_sdram_controller_0_wire_ba;
